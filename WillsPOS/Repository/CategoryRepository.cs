@@ -17,7 +17,7 @@ namespace WillsPOS.Repository
         {
             _context = context;
         }
-        async Task ICategoryRepository.AddCategoryAsync(CategoryDto dto)
+        async Task<CategoryDto> ICategoryRepository.AddCategoryAsync(CategoryDto dto)
         {
             var category = new Category
             {
@@ -28,6 +28,12 @@ namespace WillsPOS.Repository
             {
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
+
+                return new CategoryDto
+                {
+                    CategoryId = category.CategoryId,
+                    CategoryName = category.CategoryName
+                };
 
             }
             catch(DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate") == true)
@@ -68,9 +74,9 @@ namespace WillsPOS.Repository
             };
         }
 
-        async Task ICategoryRepository.UpdateCategoryAsync(CategoryDto dto)
+        async Task ICategoryRepository.UpdateCategoryAsync(int id, CategoryDto dto)
         {
-            var category = await _context.Categories.FindAsync(dto.CategoryId);
+            var category = await _context.Categories.FindAsync(id);
 
             if (category == null)
                 throw new Exception("Category not found.");

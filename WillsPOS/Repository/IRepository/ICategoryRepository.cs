@@ -7,8 +7,8 @@ namespace WillsPOS.Repository.IRepository
     {
         Task<List<CategoryDto>> CategoryListAsync();
         Task<CategoryDto> GetCategoryByIdAsync(int id);
-        Task AddCategoryAsync(CategoryDto dto);
-        Task UpdateCategoryAsync(CategoryDto dto);
+        Task<CategoryDto> AddCategoryAsync(CategoryDto dto);
+        Task UpdateCategoryAsync(int id, CategoryDto dto);
         Task DeleteCategoryAsync(int id);
     }
 }

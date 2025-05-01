@@ -7,7 +7,10 @@ namespace WillsPOS.ExceptionHandling
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
 
-            var response = new ErrorResponse()
+            httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            httpContext.Response.ContentType = "application/json";
+
+            var response = new ErrorResponse
             {
                 StatusCode = StatusCodes.Status500InternalServerError,
                 ExceptionMessage = exception.Message,
@@ -15,10 +18,6 @@ namespace WillsPOS.ExceptionHandling
             };
 
             await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
-            //httpContext.Response.ContentType = "applicatin/json";
-
-            httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
             return true;
         }
     }

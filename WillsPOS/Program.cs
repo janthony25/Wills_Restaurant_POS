@@ -2,6 +2,7 @@ using BlogReact.Data;
 using BlogReact.Models;
 using BlogReact.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -66,8 +67,10 @@ builder.Services.AddAuthentication(options =>
 
 // Add Services
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddExceptionHandler<AppExceptionHandler>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+// Exception handler
+builder.Services.AddExceptionHandler<AppExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Add Swagger 
 builder.Services.AddEndpointsApiExplorer();
@@ -112,8 +115,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseExceptionHandler(_ => { });
+// Exception handler middleware
+app.UseExceptionHandler();
 app.UseCors("AllowAll");
 app.UseAuthorization();
 
