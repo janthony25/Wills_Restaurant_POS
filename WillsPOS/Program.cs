@@ -8,6 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection.Metadata;
 using System.Text;
+using WillsPOS.ExceptionHandling;
+using WillsPOS.Repository;
+using WillsPOS.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,8 +64,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add Token Service
+// Add Services
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddExceptionHandler<AppExceptionHandler>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // Add Swagger 
 builder.Services.AddEndpointsApiExplorer();
@@ -108,6 +113,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseExceptionHandler(_ => { });
 app.UseCors("AllowAll");
 app.UseAuthorization();
 
